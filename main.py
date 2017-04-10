@@ -15,9 +15,10 @@ def main():
     df['prior'] = df['tdid_count'] * 1.0 / len(df)
 
     #TODO: posterior: out of all contact page access, what percent were accessed by this tdid
-    df['posterior'] = 1.0 * df.loc[df['trackingtagid'] == tag_dict['Contact Us'] & df['']].size() / df.loc[df['trackingtagid'] == tag_dict['Contact Us']].size)()
+    df['posterior'] = ( df.groupby(['tdid', 'trackingtagid']).size() ) / ( df.loc[df['trackingtagid'] == tag_dict['Contact Us']].size() )
     df['likelihood'] = df['posterior'] / df['prior']
     df.sort('likelihood', ascending=False)
+    print df
 
 if __name__ == '__main__':
     main()

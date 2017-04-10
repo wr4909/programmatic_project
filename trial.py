@@ -1,5 +1,6 @@
 import csv
 from Queue import PriorityQueue
+from datetime import datetime
 
 """
 Need to rank users(TDID) based on the probability of visiting the "Contact Us Page"
@@ -12,11 +13,16 @@ next(reader)
 data_table = []
 tdid_dict = {} #contains P(tdid)
 contact_dict = {} #contains percentage of tdids that visit contact-us page. P(tdid | contact-us page)
+ninety_days_tdid = {}
 
 for row in reader:
     data = row[0].split(',')
     tdid = data[0]
     tgid = data[1] #tracking tag id
+    time = datetime.strptime(data[2], '%m/%d/%y')
+
+    if (datetime.now() - time).days <= 90:
+        ninety_days_tdid[tdid] = None
 
     if tdid in tdid_dict:
         tdid_dict[tdid] = tdid_dict[tdid] + 1.0
@@ -50,8 +56,16 @@ for tdid in tdid_dict:
 for tdid in tdid_dict:
     likelihood = contact_dict[tdid] / tdid_dict[tdid]
     rank = max_likelihood - likelihood
-    pq.put((rank, tdid))
+    if tdid in ninety_days_tdid:
+        pq.put((rank, tdid, likelihood))
 
-print pq.qsize()
-while not pq.empty():
-    print pq.get()
+#print pq.qsize()
+
+count = 0
+with open('output.csv', 'w') as out_file:
+    out_file.write('tdid,score\n')
+    while not pq.empty() and count < 10000:
+        pair = pq.get()
+        out_file.write('{},{}\n'.format(pair[1],pair[2]))
+        count = count + 1
+out_file.close()
