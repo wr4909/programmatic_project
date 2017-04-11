@@ -6,8 +6,12 @@ from sklearn.naive_bayes import MultinomialNB, BernoulliNB
 
 df = pd.read_csv('Programmatic Project_Scoring_TTD pixel fires.csv', encoding='latin1')
 
+# Remove duplicate tdid
+visited_tdids = df[df.trackingtagid.as_matrix() == 'qelg9wq']['tdid']
+df['contact'] = df.tdid.isin(visited_tdids)
+df = df.drop_duplicates('tdid', keep='first')
 
-Y = (df.trackingtagid.as_matrix() == 'qelg9wq')
+Y = df['contact'].as_matrix()
 
 
 
@@ -27,7 +31,7 @@ nb = BernoulliNB()
 
 nb.fit(X, Y)
 probs = nb.predict_log_proba(X)
+df['score'] = probs[:,1]
 
-
-result = df.sort_values('score', ascending=False).drop_duplicates('tdid', keep='first')[:10000]
+result = df.sort_values('score', ascending=False)[:10000]
 result[['tdid','score']].to_csv('zach_output.csv', index=False)
