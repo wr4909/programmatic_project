@@ -56,7 +56,7 @@ for tdid in tdid_dict:
         max_likelihood = likelihood
 
 for tdid in tdid_dict:
-    likelihood = contact_dict[tdid] / tdid_dict[tdid] + tdid_dict[tdid]
+    likelihood = contact_dict[tdid] / tdid_dict[tdid]
     rank = max_likelihood - likelihood
     if tdid in ninety_days_tdid:
         pq.put((rank, tdid, likelihood))
