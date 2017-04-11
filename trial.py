@@ -6,6 +6,8 @@ from datetime import datetime
 Need to rank users(TDID) based on the probability of visiting the "Contact Us Page"
 Find P(contact-us page | tdid)
 P(tdid | contact-us page) ~= P(contact-us page | tdid) * P(tdid)
+
+For those that has not visited the contact-us page at all, rank by how much the user visited the site.
 """
 
 reader = csv.reader(open('Programmatic Project_Scoring_TTD pixel fires.csv'), delimiter=' ', quotechar='|')
@@ -54,7 +56,7 @@ for tdid in tdid_dict:
         max_likelihood = likelihood
 
 for tdid in tdid_dict:
-    likelihood = contact_dict[tdid] / tdid_dict[tdid]
+    likelihood = contact_dict[tdid] / tdid_dict[tdid] + tdid_dict[tdid]
     rank = max_likelihood - likelihood
     if tdid in ninety_days_tdid:
         pq.put((rank, tdid, likelihood))
