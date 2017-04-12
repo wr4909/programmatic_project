@@ -30,9 +30,8 @@ nb = BernoulliNB()
 
 
 nb.fit(X, Y)
-probs = nb.predict_log_proba(X)
+probs = nb.predict_proba(X)
 df['score'] = probs[:,1]
 
 result = df.sort_values('score', ascending=False)[:10000]
-result['score'] = result['score'] - result['score'].min()
 result[['tdid','score']].to_csv('output.csv', index=False)
