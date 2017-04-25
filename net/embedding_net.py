@@ -38,7 +38,7 @@ if args.cuda:
     torch.cuda.manual_seed(args.seed)
 
 
-df = pd.read_csv('Programmatic Project_Scoring_TTD pixel fires.csv', encoding='latin1', parse_dates=['logentrytime'])
+df = pd.read_csv('../Programmatic Project_Scoring_TTD pixel fires.csv', encoding='latin1', parse_dates=['logentrytime'])
 
 # Remove duplicate tdid
 visited_tdids = df[df.trackingtagid.as_matrix() == 'qelg9wq']['tdid']
