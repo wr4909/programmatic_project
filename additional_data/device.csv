@@ -1,0 +1,5 @@
+device.device,device.relevance,device.BidFactor,device.eCPM,device.eFlightSpend,device.cumulativeSpend,device.eCPA,device.cumulativeEcpa,device.eCTR,device.eCPC,device.eViewability
+Unknown,6.89,2.93,3.01,84,453.31,2749.49,1097.72,3.30E-04,8.8,0.5313
+PC,1.41,1.34,3.07,1509828,1510281.61,13692,13645.01,7.20E-04,4.21,0.6005
+Mobile,0.01,0,2.74,452309,1962590.15,1726461.83,17689.63,0.00158,1.68,0.407
+Tablet,0,0,2.6,113664,2076254.09,Infinity,18714.13,0.00116,2.18,0.4696
