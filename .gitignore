@@ -1,1 +1,3 @@
 .~lock.*
+outputs
+__pycache__

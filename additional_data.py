@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import numpy as np
 
 """
 Loads all csvs into a list of DataFrames
@@ -11,25 +12,33 @@ df_list[index_dict["ip"]]
 """
 
 def load_all_csv(directory="/additional_data"):
-	cur_dir = os.getcwd()
-	target_directory = cur_dir + directory + "/"
-	files = [ f for f in os.listdir(target_directory) if os.path.isfile(os.path.join(target_directory,f)) ]
-	df_list = []
-	for file_csv in files:
-		df_list.append(pd.read_csv(target_directory + file_csv))
-	index_dict = {}
-	for indx, file_csv in enumerate(files):
-		index_dict[file_csv] = indx
+    cur_dir = os.getcwd()
+    target_directory = cur_dir + directory + "/"
+    files = [ f for f in os.listdir(target_directory) if os.path.isfile(os.path.join(target_directory,f)) ]
+    dfs = {file_csv: pd.read_csv(target_directory + file_csv, encoding='latin1') for file_csv in files}
+    def rowDict(f):
+        keys = f[f.columns.values.tolist()[0]].tolist()
+        f = f[f.columns.values.tolist()[1:]]
+        valArray = f.ix[:, f.dtypes == float].as_matrix()
+        return {k: valArray[i] for i,k in enumerate(keys)}, valArray.shape[1]
 
-	return df_list, index_dict
+    return {k: rowDict(v) for k,v in dfs.items()}
 
 """
 Takes a normal DataFrame from part 1 (or a slice) and inner joins using the additional
 DataFrame, on a specified column from each.
 """
 
-def inner_join(normal_df, additional_df, normal_df_column_name, additional_df_column_name):
-	return pd.merge(normal_df, additional_df, on =[normal_df_column_name, additional_df_column_name])
+def inner_join(normal_df, additional_pair, normal_df_column_name):
+    additional, width = additional_pair
+    data = []
+    for d in normal_df[normal_df_column_name]:
+        if d in additional:
+            data.append(additional[d])
+        else:
+            data.append(np.zeros(width))
+
+    return np.stack(data)
 
 if __name__ == "__main__":
-	pass
+    pass
