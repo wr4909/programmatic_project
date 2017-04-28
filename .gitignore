@@ -1,3 +1,4 @@
 .~lock.*
 outputs
 __pycache__
+.*.swp
